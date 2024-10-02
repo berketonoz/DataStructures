@@ -17,4 +17,4 @@ Within each language directory, data structures are organized into subdirectorie
 To use the code samples in this repository, clone the repo to your local machine using the following command:
 
 ```bash
-git clone https://github.com/yourusername/data-structures-repo.git
+git clone https://github.com/berketonoz/data-structures-repo.git
