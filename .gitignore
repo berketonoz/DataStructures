@@ -1,0 +1,9 @@
+# Structure Binaries
+Stack/Cpp/Stack
+LinkedList/Cpp/LinkedList
+HashTable/Cpp/HashTable
+Queue/Cpp/Queue
+
+# Generated Resources
+*dSYM*
+.vscode
