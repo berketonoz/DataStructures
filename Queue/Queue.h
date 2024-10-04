@@ -2,14 +2,23 @@
 #include <stdexcept>
 
 template <typename T>
+struct Node
+{
+    T data;
+    Node<T> *next;
+
+    Node<T>(T data) : data(data), next(nullptr) {}
+};
+
+template <typename T>
 class Queue
 {
 private:
-    int size;
-    std::vector<T> *queue;
+    Node<T> *front;
+    Node<T> *rear;
 
 public:
-    Queue(int size);
+    Queue();
     ~Queue();
 
     void enqueue(T value);
@@ -19,48 +28,59 @@ public:
 };
 
 template <typename T>
-Queue<T>::Queue(int size)
+Queue<T>::Queue()
 {
-    this->size = size;
-    this->queue = new std::vector<T>();
+    this->front = nullptr;
+    this->rear = nullptr;
 }
 
 template <typename T>
 Queue<T>::~Queue()
 {
-    this->size = 0;
-    queue->clear();
-    delete queue;
+    while (this->front != nullptr)
+    {
+        this->dequeue();
+    }
 }
 
 template <typename T>
 void Queue<T>::enqueue(T value)
 {
-    this->queue->push_back(value);
+    Node<T> *newNode = new Node<T>(value);
+    if (this->isEmpty())
+    {
+        this->front = this->rear = newNode;
+    }
+    else
+    {
+        this->rear->next = newNode;
+        this->rear = newNode;
+    }
 }
 
 template <typename T>
 void Queue<T>::dequeue()
 {
-    if (this->isEmpty())
+    if (!this->isEmpty())
     {
-        throw std::runtime_error("Queue is empty, cannot dequeue");
+        Node<T> *temp = this->front;
+        this->front = this->front->next;
+        if (this->front == nullptr)
+        {
+            this->rear = nullptr;
+        }
+        delete temp;
     }
-    this->queue->erase(this->queue->begin());
 }
 
 template <typename T>
 T Queue<T>::peek()
 {
-    if (this->isEmpty())
-    {
-        throw std::runtime_error("Queue is empty");
-    }
-    return (*this->queue)[0];
+    return (!this->isEmpty()) ? this->front->data : -1;
 }
 
 template <typename T>
 bool Queue<T>::isEmpty()
 {
-    return this->queue->empty();
+    return this->front == nullptr;
 }
