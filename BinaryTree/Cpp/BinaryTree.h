@@ -45,7 +45,6 @@ void BinaryTree<T>::insert(T value)
     if (this->root == nullptr)
     {
         this->root = newNode;
-        return;
     }
     else
     {
@@ -82,7 +81,32 @@ void BinaryTree<T>::insert(T value)
 template <typename T>
 bool BinaryTree<T>::search(T value)
 {
-    return false;
+    Node<T> *temp = this->root;
+    bool found = false;
+    bool traversed = false;
+    while(!found && !traversed){
+        if(temp->data == value){
+            found = true;
+        }
+
+        if(temp->data > value){
+            if(temp->left == nullptr){
+                traversed = true;
+            }
+            else{
+                temp = temp->left;
+            }
+        }
+        else if(temp->data < value){
+            if(temp->right == nullptr){
+                traversed = true;
+            }
+            else{
+                temp = temp->right;
+            }
+        }
+    }
+    return found && !traversed;
 }
 
 template <typename T>
