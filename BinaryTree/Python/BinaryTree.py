@@ -17,7 +17,7 @@ class BinaryTree:
         else:
             temp = self.root
             inserted = False
-            while not inserted and temp.data != value:
+            while not inserted:
                 if temp.data < value:
                     if not temp.right:
                         temp.right = Node(value)
@@ -28,6 +28,8 @@ class BinaryTree:
                         temp.left = Node(value)
                         inserted = True
                     temp = temp.left
+                else:
+                    raise KeyError("Key already exists")
 
     def inorder(self,node):
         if node.left:
@@ -48,11 +50,13 @@ class BinaryTree:
             if temp.data > value:
                 if not temp.left:
                     traversed = True
-                temp = temp.left
+                else:
+                    temp = temp.left
             elif temp.data < value:
                 if not temp.right:
-                    traversed =True
-                temp = temp.right
+                    traversed = True
+                else:
+                    temp = temp.right
         
         return found and not traversed
 
