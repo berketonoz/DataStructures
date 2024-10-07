@@ -25,6 +25,8 @@ class BinaryTree:
                         temp.left = Node(value,temp)
                         temp = temp.left
                     temp = temp.left
+                else:
+                    raise KeyError("Key already exists")
 
     def __insertPreorder__(self,node):
         if node:
@@ -53,7 +55,8 @@ class BinaryTree:
             if temp.data > value:
                 if not temp.left:
                     traversed = True
-                temp = temp.left
+                else:
+                    temp = temp.left
             elif temp.data < value:
                 if not temp.right:
                     traversed =True
