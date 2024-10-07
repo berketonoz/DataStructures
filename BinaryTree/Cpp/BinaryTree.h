@@ -45,6 +45,7 @@ void BinaryTree<T>::insert(T value)
     Node<T> *newNode = new Node<T>(value);
     if (this->root == nullptr)
         this->root = newNode;
+    }
     else
     {
         Node<T> *temp = this->root;
