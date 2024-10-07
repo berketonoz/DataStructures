@@ -16,7 +16,7 @@ private:
     Node<T> *root;
     void destroyTree(Node<T> *node);
     void inorder(Node<T> *node);
-    void insertPreOrder(Node<T> *node);
+    void insertPreorder(Node<T> *node);
 
 public:
     BinaryTree(/* args */);
@@ -103,13 +103,13 @@ void BinaryTree<T>::insert(T value)
 }
 
 template <typename T>
-void BinaryTree<T>::insertPreOrder(Node<T> *node)
+void BinaryTree<T>::insertPreorder(Node<T> *node)
 {
     if (node)
     {
         this->insert(node->data);
-        this->insertPreOrder(node->left);
-        this->insertPreOrder(node->right);
+        this->insertPreorder(node->left);
+        this->insertPreorder(node->right);
     }
 }
 
@@ -148,12 +148,12 @@ void BinaryTree<T>::deleteNode(T value)
         if (this->root->right != nullptr)
         {
             this->root = root->right;
-            this->insertPreOrder(current->left);
+            this->insertPreorder(current->left);
         }
         else if (this->root->left != nullptr)
         {
             this->root = root->left;
-            this->insertPreOrder(current->right);
+            this->insertPreorder(current->right);
         }
         std::cout << current->data << " deleted(Root)" << std::endl;
         delete current;
@@ -172,8 +172,8 @@ void BinaryTree<T>::deleteNode(T value)
             {
                 parent->left = nullptr;
             }
-            this->insertPreOrder(current->right);
-            this->insertPreOrder(current->left);
+            this->insertPreorder(current->right);
+            this->insertPreorder(current->left);
             std::cout << current->data << " deleted" << std::endl;
             delete current;
         }
