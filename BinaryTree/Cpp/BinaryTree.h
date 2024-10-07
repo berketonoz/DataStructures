@@ -4,8 +4,9 @@ struct Node
     T data;
     Node *right;
     Node *left;
+    Node *parent;
 
-    Node(T data) : right(nullptr), left(nullptr), data(data) {}
+    Node(T data, Node *parent = nullptr) : right(nullptr), left(nullptr), data(data), parent(parent) {}
 };
 
 template <typename T>
@@ -36,16 +37,44 @@ BinaryTree<T>::BinaryTree(/* args */)
 template <typename T>
 BinaryTree<T>::~BinaryTree()
 {
-    this->destroyTree(this - root);
+    this->destroyTree(this->root);
+}
+
+template <typename T>
+inline void BinaryTree<T>::destroyTree(Node<T> *node)
+{
+    if (node)
+    {
+        destroyTree(node->left);
+        destroyTree(node->right);
+        delete node;
+    }
+}
+
+template <typename T>
+void BinaryTree<T>::inorder()
+{
+    std::cout << "Inorder: ";
+    this->inorder(this->root);
+    std::cout << std::endl;
+}
+
+template <typename T>
+void BinaryTree<T>::inorder(Node<T> *node)
+{
+    if (node)
+    {
+        this->inorder(node->left);
+        std::cout << node->data << " ";
+        this->inorder(node->right);
+    }
 }
 
 template <typename T>
 void BinaryTree<T>::insert(T value)
 {
-    Node<T> *newNode = new Node<T>(value);
     if (this->root == nullptr)
-        this->root = newNode;
-    }
+        this->root = new Node<T>(value);
     else
     {
         Node<T> *temp = this->root;
@@ -53,10 +82,9 @@ void BinaryTree<T>::insert(T value)
         {
             if (temp->data >= value)
             {
-
                 if (temp->left == nullptr)
                 {
-                    temp->left = newNode;
+                    temp->left = new Node<T>(value, temp);
                     temp = temp->left; // to force temp nullptr after creation
                 }
                 temp = temp->left;
@@ -65,7 +93,7 @@ void BinaryTree<T>::insert(T value)
             {
                 if (temp->right == nullptr)
                 {
-                    temp->right = newNode;
+                    temp->right = new Node<T>(value, temp);
                     temp = temp->right; // to force temp nullptr after creation
                 }
                 temp = temp->right;
@@ -114,68 +142,44 @@ void BinaryTree<T>::deleteNode(T value)
 {
     if (!this->root)
         return;
+    else if (this->root->data == value)
+    {
+        Node<T> *current = this->root;
+        if (this->root->right != nullptr)
+        {
+            this->root = root->right;
+            this->insertPreOrder(current->left);
+        }
+        else if (this->root->left != nullptr)
+        {
+            this->root = root->left;
+            this->insertPreOrder(current->right);
+        }
+        std::cout << current->data << " deleted(Root)" << std::endl;
+        delete current;
+    }
     else
     {
-        if (this->search(value) != nullptr)
+        Node<T> *current = this->search(value);
+        if (current != nullptr)
         {
-            if (this->root->data == value)
+            Node<T> *parent = current->parent;
+            if (current->data > parent->data) // Right child
             {
+                parent->right = nullptr;
             }
-            else
+            else // Left child
             {
-
-                Node<T> *temp = this->root;
-                bool found = false;
-
-                while (!found)
-                {
-                    if (temp->data > value)
-                    {
-                        temp = temp->left;
-                    }
-                    else if (temp->data < value)
-                    {
-                        temp = temp->right;
-                    }
-                    else
-                    {
-                        found = true;
-                    }
-                }
-
-                Node<T> *tt = temp;
-                this->destroyTree(temp);
-                this->insertPreOrder(tt->left);
-                this->insertPreOrder(tt->right);
+                parent->left = nullptr;
             }
+            this->insertPreOrder(current->right);
+            this->insertPreOrder(current->left);
+            std::cout << current->data << " deleted" << std::endl;
+            delete current;
         }
-    }
-}
-
-template <typename T>
-inline void BinaryTree<T>::inorder()
-{
-    this->inorder(this->root);
-}
-
-template <typename T>
-inline void BinaryTree<T>::destroyTree(Node<T> *node)
-{
-    if (node)
-    {
-        destroyTree(node->left);
-        destroyTree(node->right);
-        delete node;
-    }
-}
-
-template <typename T>
-void BinaryTree<T>::inorder(Node<T> *node)
-{
-    if (node)
-    {
-        this->inorder(node->left);
-        std::cout << node->data << " " << std::endl;
-        this->inorder(node->right);
+        else
+        {
+            std::cout << value << " Not Found" << std::endl;
+        }
     }
 }
